@@ -1,12 +1,15 @@
 # SeniorProject-Blockchain
 Senior Project Code Repo
 
+# Dependencies
+1.) Crypto library
+
 # Instructions
-1. All project dependencies are located in ChainENV which is a python virtual environment.
-2. To use this environment virtual environment for python 3 must be installed
-3. To install virtual environment on OS X use the command: virtualenv -p python3 ChainENV
-4. The environment must be named "ChainENV"
-5. After your virtual environment is setup, activate it, and run the project
+1.) create a new virtual environmnt by typing "virtualenv <Environment Name>" , within your project folder.
+2.) activate the virtual environment by typing "source <Environment Name>/bin/activate".
+3.) navigate to the virtual environment folder.
+4.) type "pip3 install Crypto"
+
 
 # Links
 1.) https://medium.com/crypto-currently/lets-build-the-tiniest-blockchain-e70965a248b
