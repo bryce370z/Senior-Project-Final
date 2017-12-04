@@ -19,6 +19,7 @@ class Pharmacy:
     def corrupt_block(self, index):
         try:
             self.BlockChain[index].header = "CORRUPTED."
+            print("BlockChain Corrupted.")
         except Exception:
             print("Blockchain could not be corrupted.")
 

@@ -1,3 +1,5 @@
+from Block import Block
+import datetime as date
 class Doctor:
 
     def __init__(self, mediator):
@@ -11,11 +13,23 @@ class Doctor:
         """
         self.mediator.Subscribers.append(self)
 
-    def add_block(self, new_block):
+    def add_block(self):
         """
         adds block to blockchain, through mediator
         """
-        self.mediator.add_block(new_block)
+        self.mediator.add_block(self.mediator.create_block())
+
+    def create_genesis_block(self):
+        """
+        Creates initial block in blockchain
+        """
+        return Block(index=0, timestamp=str(date.datetime.now()), header="Genesis Block", data="In the beginning God created the heavens and the earth.", previous_hash="0")
+
+    def init_blockchain(self):
+        """
+        adds genesis block to chain
+        """
+        self.mediator.add_block(self.create_genesis_block())
 
     def print_chain(self):
         """

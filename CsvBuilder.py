@@ -19,10 +19,15 @@ class CsvBuilder:
         data = self.data
         if len(data) > 0:
             file = open(self.file_path, "a")
-            for string in self.data:
+            file.write("HASH BATCH\n")
+            for i in range(1, len(self.data) + 1):
+                string = self.data[i - 1]
                 file.write(string + ',')
+                if(i % 19 == 0):
+                    file.write("\n")
             file.write("\n")
             file.close()
+
 
     def clear_csv(self):
         """

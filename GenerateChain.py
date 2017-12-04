@@ -6,39 +6,16 @@ from Pharmacy import Pharmacy
 from Doctor import Doctor
 from ChainMediator import ChainMediator
 
-def genesis_block():
-    """
-    Creates initial block in blockchain
-    """
-    return Block(index=0, timestamp=str(date.datetime.now()), header="Genesis Block", data="In the beginning God created the heavens and the earth.", previous_hash="0")
-
-def next_block(last_block):
-    """
-    Creates next block in blockchain
-        args:
-            last_block: the previous block in the blockchain
-    """
-    index = last_block.index + 1
-    timestamp = str(date.datetime.now())
-    header = "BLOCK: " + str(index)
-    db = DataBuilder()
-    data = db.build_data()
-    last_block_hash = last_block.hash
-    return Block(index=index, timestamp=timestamp, header=header, data=data, previous_hash=last_block_hash)
-
 def main():
-    # outputting hashes to CSV for analysis
+
+    # initializing csv builder to hold block hashes
     cb = CsvBuilder("output.csv")
-    print("would you like to clear the csv output file, before taking in the next list of hashes? Y/N: ")
-    choice = str(input())
-    if choice == "Y" or choice == "y":
-        cb.clear_csv()
 
     # initializing entites to share generated chain
     cm = ChainMediator()
     doctor = Doctor(cm)
     pharmacy = Pharmacy(cm)
-    doctor.add_block(genesis_block())
+    doctor.init_blockchain()
 
     while True:
         print("Options:")
@@ -47,7 +24,8 @@ def main():
         print("[3] Pharmacist: Fill a prescription (decrypted)")
         print("[4] Corrupt the blockchain")
         print("[5] Validate the blockchain")
-        print("[6] Output blockchain to CSV")
+        print("[6] Output blockchain hashes to CSV")
+        print("[7] Clear blockchain hash CSV")
         print("[quit] exit program")
 
         decision = str(input())
@@ -58,11 +36,8 @@ def main():
         elif decision == "1":
             print("How many prescriptions (blocks) would you like to write? ")
             num_blocks = int(input())
-            for i in range(1, num_blocks + 1):
-                new_block = next_block(doctor.BlockChain[i - 1])
-                doctor.add_block(new_block)
-                cb.add_data(str(new_block.hash))
-                # print(str(new_block.hash) + str(new_block.index))
+            for i in range(num_blocks):
+                doctor.add_block()
 
         # Doctor: View the blockchain (encrypted)
         elif decision == "2":
@@ -75,7 +50,6 @@ def main():
         # Corrupt the blockchain
         elif decision == "4":
             pharmacy.corrupt_block(1)
-            print("Blockchain corrupted.")
 
         # Validate the blockchain
         elif decision == "5":
@@ -85,11 +59,16 @@ def main():
                 print("BlockChain Corrupt. Resetting all blocks to Good Chain.")
                 cm.fix_corrupt_chains()
 
-        # write blockchain to csv
+        # write blockchain hashes to csv
         elif decision == "6":
             cb.write_to_csv()
-            print("Output complete.")
-            
+            print("Output to",cb.file_path,"complete.")
+
+        # clear hash csv file
+        elif decision == "7":
+            cb.clear_csv()
+            print(cb.file_path,"cleared.")
+
         else:
             print("Please enter one of the valid options.")
 
